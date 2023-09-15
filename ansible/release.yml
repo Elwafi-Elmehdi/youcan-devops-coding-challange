@@ -1,0 +1,20 @@
+---
+- name: YouCan Codding Challenge
+  connection: local
+  hosts: localhost
+  tasks:
+    - name: Copy PHP artifacts from app dir into build container
+      community.docker.docker_container_copy_into:
+        container: app_container_1
+        path: ../app/index.php
+        container_path: /usr/src/myapp/index.php
+    # We can add here task to build the artifact and release final app
+    # the app used in this demo is too simple to do so
+    - name: Rsync release to other containers
+      community.docker.docker_container_exec:
+        container: app_container_1
+        command: /bin/bash -c "rsync -az -e 'ssh -o StrictHostKeyChecking=no' /usr/src/myapp/* {{ item }}:/usr/src/myapp/*"
+      with_items:
+        - app_container_2
+        - app_container_3
+        - app_container_4
