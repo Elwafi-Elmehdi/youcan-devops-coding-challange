@@ -1,0 +1,35 @@
+---
+- name: YouCan Ship Feature Challenge
+  hosts: localhost
+  connection: local
+  tasks:
+      - name: Start SSH service on containers
+        community.docker.docker_container_exec:
+          container: "{{ item  }}"
+          command: /bin/bash -c "service ssh start"
+        with_items:
+          - app_container_1
+          - app_container_2
+          - app_container_3
+          - app_container_4
+
+      - name: Generate SSH config file
+        copy:
+          content: |
+            Host app*
+            ForwardAgent yes
+            IdentityFile /root/.ssh/youcan
+          dest: ./config
+
+      - name: Copy SSH config file into build container 
+        community.docker.docker_container_copy_into:
+          container: app_container_1
+          path: ./config
+          container_path: /root/.ssh/config
+ 
+      - name: Copy SSH private key to build machine
+        community.docker.docker_container_copy_into:
+          container: app_container_1
+          path: ./youcan
+          container_path: /root/.ssh/youcan
+  
