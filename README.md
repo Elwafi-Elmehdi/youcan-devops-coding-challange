@@ -46,6 +46,17 @@ The project is structured as follows
 ## Steps
 
 -   Clone repo to you local machine
+-   make sure port 8090 is avaible for use
 -   run `docker-compose up -d` command
--   make sure you are in the ansible dir
--   run the boostrapping script `ansbile-playbook bootstrap-env.yml`
+-   make sure you are in the ansible dir, run the boostrapping script `ansbile-playbook bootstrap-env.yml`
+
+## Solution
+
+The expected solution talks about using rsync as the utility to sync files between apps, this is what is implemented in this repo, when changes are made to the app, we can run the **release.yml** ansible playbook and the script will copy the app into the app (in case of sophistiacted php app build the app) and then sync the final result to other apps.
+
+There are solutions to this problem:
+
+-   use **NFS-based volumes**, if the app is stateless its release can be stored in a shared volumes and all app containers can mount it and use it.
+-   use **disrtibuted file systems** like Gluster, BTRFS, Ceph, these fs has replacation features making them usefull for these kind of situations,
+-   use **docker copy feature**, the copy feature can be used in a scripted way to replicate the final release to all containers if the build/artifcated existed outside the containers (docker host machine)
+-   use **scheduling feature in docker or os-level**, to pull,build, and release application then replicate to other app containers using one of the above methods.
