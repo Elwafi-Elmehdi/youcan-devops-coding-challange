@@ -9,7 +9,39 @@
 
       - name: docker-compose up
         community.docker.docker_compose:
-            project_src: ..
+            project_name: youcan-devops-challenge
+            definition:
+                version: "3"
+                services:
+                    openresty:
+                        build: ../nginx/
+                        ports:
+                            - "8090:80"
+                        networks:
+                            - app
+                    app_container_1:
+                        build: .
+                        container_name: "app_container_1"
+                        networks:
+                            - app
+                    app_container_2:
+                        build: .
+                        container_name: "app_container_2"
+                        networks:
+                            - app
+
+                    app_container_3:
+                        build: .
+                        container_name: "app_container_3"
+                        networks:
+                            - app
+                    app_container_4:
+                        build: .
+                        container_name: "app_container_4"
+                        networks:
+                            - app
+                networks:
+                    app:
             register: output
 
       - name: Show docker-compose logs
