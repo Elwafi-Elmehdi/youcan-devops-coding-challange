@@ -1,0 +1,17 @@
+---
+- name: Run docker compose with ansible playbook
+  hosts: localhost
+  tasks:
+      - name: Remove already running docker-compose project
+        community.docker.docker_compose:
+            project_src: ..
+            state: absent
+
+      - name: docker-compose up
+        community.docker.docker_compose:
+            project_src: ..
+            register: output
+
+      - name: Show docker-compose logs
+        ansible.builtin.debug:
+            var: output
