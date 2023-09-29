@@ -25,6 +25,8 @@ The project is structured as follows
 ├── ansible
 │   ├── bootstrap-env.yml
 │   ├── config
+│   ├── docker-down.yml
+│   ├── docker-up.yml
 │   ├── release.yml
 │   └── youcan
 ├── app
@@ -34,8 +36,17 @@ The project is structured as follows
 ├── Dockerfile
 ├── nginx
 │   ├── Dockerfile
-│   └── proxy.conf
-└── README.md
+│   ├── proxy.conf
+│   └── rev-proxy.conf
+├── README.md
+└── terraform
+    ├── main.tf
+    ├── providers.tf
+    ├── terraform.tf
+    ├── terraform.tfstate
+    ├── terraform.tfstate.backup
+    └── variables.tf
+
 ```
 
 -   in the **ansbile** dir, we have 2 playbooks, the order of running these two is important, first we run the **bootstrap-env.yml** playbook, then when we have changes mad in app we run the **release.yml** playbook, note that we have also other file like config which is SSH config file for automatic ssh access when using `rsync`
@@ -63,4 +74,4 @@ There are solutions to this problem:
 
 ## How can we rollout changes to production with zero downtime?
 
-we can ship features to production using **Blue-Green Deployment** technique, in which blue represents the current production environment, we provision an identical environment of production (a plus is having production environment configuration saved as code) called green environment, in which we deploy a new application with the new features, we can use HAProxy to redirect traffic to the new green env, we can just to redirect all or a portion of users, and we monitor system and application performance metrics to track if there is a bug/downtime, if nothing happens, there will be users still connected to blue env, we should wait until sessions expire, and then we can decommission the blue environment.
+we can ship features to production using **Blue-Green Deployment** technique, in which blue represents the current production environment, we provision an identical environment of production (a plus is having production environment configuration saved as code) called green environment, in which we deploy a new application with the new features, we can use HAProxy to redirect traffic to the new green env, we can just to redirect all or a portion of users, and we monitor system and application performance metrics to track if there is a bug/downtime, if nothing happens, there will be users still connected to blue env, we should wait until sessions expire, and then we can decommission the blue environment. if not we can always redirect traffic back to blue environment.
