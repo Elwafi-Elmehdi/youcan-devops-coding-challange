@@ -60,3 +60,7 @@ There are solutions to this problem:
 -   use **disrtibuted file systems** like Gluster, BTRFS, Ceph, these fs has replacation features making them usefull for these kind of situations,
 -   use **docker copy feature**, the copy feature can be used in a scripted way to replicate the final release to all containers if the build/artifcated existed outside the containers (docker host machine)
 -   use **scheduling feature in docker or os-level**, to pull,build, and release application then replicate to other app containers using one of the above methods.
+
+## How can we rollout changes to production with zero downtime?
+
+we can ship features to production using **Blue-Green Deployment** technique, in which blue represents the current production environment, we provision an identical environment of production (a plus is having production environment configuration saved as code) called green environment, in which we deploy a new application with the new features, we can use HAProxy to redirect traffic to the new green env, we can just to redirect all or a portion of users, and we monitor system and application performance metrics to track if there is a bug/downtime, if nothing happens, there will be users still connected to blue env, we should wait until sessions expire, and then we can decommission the blue environment.

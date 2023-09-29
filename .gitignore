@@ -1,4 +1,6 @@
+# SSH private key
 **youcan**
+
 # Local .terraform directories
 
 **/.terraform/*
@@ -21,7 +23,8 @@
 
 .envrc
 
-
+# Terraform state file
+**terraform.tfstate**
 
 # Ignore CLI configuration files
 
