@@ -1,0 +1,8 @@
+---
+- name: Run docker compose with ansible playbook
+  hosts: localhost
+  tasks:
+      - name: docker-compose down
+        community.docker.docker_compose:
+            project_src: ..
+            stopped: true
